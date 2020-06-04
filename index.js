@@ -22,7 +22,7 @@ async function run() {
         owner,
         repo,
         issue_number: issueNumber,
-        body: `Head's up ${match.split("=")[1]} - the '${label}' label was attached to this issue!!`
+        body: `Head's up ${match.split("=")[1]} - the '${label}' label was attached to this issue!!!`
       });
     } else {
       console.log("No matching recipients found for label ${label}.");
