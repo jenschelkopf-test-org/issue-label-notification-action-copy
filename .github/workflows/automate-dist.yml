@@ -1,0 +1,31 @@
+name: Automate dist compilation
+
+on:
+  pull_request:
+    types:
+      - opened
+      - synchronize
+    branches:
+      - master
+jobs:
+  compile:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - uses: dorny/pr-changed-files-filter@v1
+      id: filter
+      with:
+        filters: |
+          dist:
+            - 'dist/**'
+
+    # Run only if ‘dist' files were not changed
+    - name: Compile action into a single file in the dist folder
+      if: steps.filter.outputs.dist == 'false'
+      run: npm run build
+
+    - name: Commit dist folder
+      if: steps.filter.outputs.dist == 'false'
+      uses: actions-go/push@master
+      with:
+        commit-message: '[Auto] Update dist folder'
