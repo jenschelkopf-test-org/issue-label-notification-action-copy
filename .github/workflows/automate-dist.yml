@@ -34,8 +34,21 @@ jobs:
       if: steps.filter.outputs.dist == 'false'
       run: npm run build
 
-    - name: Commit dist folder
+#     - name: Commit dist folder
+#       if: steps.filter.outputs.dist == 'false'
+#       uses: actions-go/push@master
+#       with:
+#         commit-message: '[Auto] Update dist folder'
+        
+    - name: Commit files
+      if: steps.filter.outputs.dist == 'false'      
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git commit -m "Add changes" -a
+   
+    - name: Push changes
       if: steps.filter.outputs.dist == 'false'
-      uses: actions-go/push@master
+      uses: ad-m/github-push-action@master
       with:
-        commit-message: '[Auto] Update dist folder'
+        github_token: ${{ secrets.GITHUB_TOKEN }}
